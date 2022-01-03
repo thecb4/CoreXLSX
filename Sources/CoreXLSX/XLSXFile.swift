@@ -60,11 +60,12 @@ public class XLSXFile {
   public init?(
     filepath: String,
     bufferSize: UInt32 = 10 * 1024 * 1024,
-    errorContextLength: UInt = 0
+    errorContextLength: UInt = 0,
+    preferredEncoding: String.Encoding? = nil
   ) {
     let archiveURL = URL(fileURLWithPath: filepath)
 
-    guard let archive = Archive(url: archiveURL, accessMode: .read) else {
+    guard let archive = Archive(url: archiveURL, accessMode: .read, preferredEncoding: preferredEncoding) else {
       return nil
     }
 
@@ -85,9 +86,10 @@ public class XLSXFile {
   public init(
     data: Data,
     bufferSize: UInt32 = 10 * 1024 * 1024,
-    errorContextLength: UInt = 0
+    errorContextLength: UInt = 0,
+    preferredEncoding: String.Encoding? = nil
   ) throws {
-    guard let archive = Archive(data: data, accessMode: .read)
+    guard let archive = Archive(data: data, accessMode: .read, preferredEncoding: preferredEncoding)
     else { throw CoreXLSXError.dataIsNotAnArchive }
 
     self.archive = archive
